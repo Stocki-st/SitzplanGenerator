@@ -1,0 +1,32 @@
+{
+  "0": {
+    "name": "Stefan Stockinger",
+    "firstRow": false,
+    "sitAlone": true,
+    "forbiddenNeighbors": [
+      "Elisabeth Koblmiller",
+      "Endro Moro",
+      "Linda Fellfrau"
+    ]
+  },
+  "1": {
+    "name": "Elisabeth Koblmiller",
+    "firstRow": true,
+    "sitAlone": false,
+    "fixedChair": "1.1",
+    "forbiddenNeighbors": [
+      "Elisabeth Koblmiller",
+      "Endro Moro",
+      "Linda Fellfrau"
+    ]
+  },
+  "2": {
+    "name": "Stefan Koblmiller"
+  },
+  "3": {
+    "name": "Endo Moro"
+  },
+  "4": {
+    "name": "Linda Fellfrau"
+  }
+}
