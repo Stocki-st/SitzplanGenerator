@@ -20,6 +20,18 @@ public class ClassListHandler {
 	public ClassListHandler() {
 		numOfStudents = 0;
 	}
+	
+	public ClassListHandler copyClassList (ClassListHandler list){
+		ClassListHandler classList = new ClassListHandler();
+		  //for all properties in FOo
+		  classList.studentList = (Vector<String>) list.studentList.clone();
+		  classList.firstRowList = (Vector<String>) list.firstRowList.clone();
+		  classList.sitAloneList = (Vector<String>) list.sitAloneList.clone();
+		  classList.fixedChairMap = new HashMap<String, String>(list.fixedChairMap);
+		  classList.forbiddenNeighborsMap = new HashMap<String, Vector<String>>(list.forbiddenNeighborsMap);
+	  
+		  return classList;
+		}
 
 	public int getNumOfStudents() {
 		return numOfStudents;
@@ -29,11 +41,11 @@ public class ClassListHandler {
 		numOfStudents = num;
 	}
 
-	static Vector<String> studentList = new Vector<>();
-	static Vector<String> firstRowList = new Vector<>();
-	static Vector<String> sitAloneList = new Vector<>();
-	static Map<String, String> fixedChairMap = new HashMap<String, String>();
-	static Map<String, Vector<String>> forbiddenNeighborsMap = new HashMap<String, Vector<String>>();
+	public static Vector<String> studentList = new Vector<>();
+	public static Vector<String> firstRowList = new Vector<>();
+	public static Vector<String> sitAloneList = new Vector<>();
+	public static Map<String, String> fixedChairMap = new HashMap<String, String>();
+	public static Map<String, Vector<String>> forbiddenNeighborsMap = new HashMap<String, Vector<String>>();
 
 	private static int numOfStudents;
 	private static String classListFilename = "C:/Users/mails/Projekte/seating-chart-generator/1a.json";
@@ -42,6 +54,26 @@ public class ClassListHandler {
 		FileWriter file = new FileWriter(filename);
 		file.write(data.toJSONString());
 		file.flush();
+	}
+
+	public static void removeNameFromLists(String name) {
+		int index = 0;
+		index = studentList.indexOf(name);
+		if (index > 0) {
+			studentList.remove(index);
+		}
+
+		index = firstRowList.indexOf(name);
+		if (index > 0) {
+			firstRowList.remove(index);
+		}
+
+		index = sitAloneList.indexOf(name);
+		if (index > 0) {
+			sitAloneList.remove(index);
+		}
+
+		//fixedChairMap.remove(name);
 	}
 
 	private static JSONObject readStudentListFromJson(String filename)

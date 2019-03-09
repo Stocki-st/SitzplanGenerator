@@ -21,6 +21,9 @@ public class Main extends Application {
 
 			primaryStage.setScene(new Scene(mainPane));
 			primaryStage.show();
+			/*GeneratedTableGUI table = new GeneratedTableGUI() ;
+			table.SaveSeatingTableToPdf(mainPane);*/
+
 
 		} catch (Exception e) {
 			e.printStackTrace();

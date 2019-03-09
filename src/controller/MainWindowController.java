@@ -6,6 +6,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import application.ClassListHandler;
+import application.ClassRoomGenerator;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -21,7 +22,7 @@ public class MainWindowController implements Initializable {
 	ClassListHandler classListHandler = new ClassListHandler();
 
 	@FXML
-	private Button btn_editClassList, btn_generateSeatingChart, btn_loadClassList;
+	private Button btn_editClassList, btn_generateSeatingChart, btn_loadClassList, btn_editGroundPlan;
 	@FXML
 	private Label label_ClassList, label_numOfPersons;
 
@@ -29,6 +30,11 @@ public class MainWindowController implements Initializable {
 	private Spinner<Integer> sel_numOfRows, sel_desksPerRow;
 
 	final int initialValue = 3;
+
+	String[][] tableArray = null;
+	Button[][] btnArray = null;
+
+	ClassRoomGenerator tableGen = null;
 
 	// Value factory.
 	SpinnerValueFactory<Integer> valueFactory_numOfRows = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 9,
@@ -45,6 +51,8 @@ public class MainWindowController implements Initializable {
 	}
 
 	public void callback_loadJsonClassList() throws IOException {
+		System.out.println("Button pressed: callback_loadJsonClassList");
+
 		Window dummyWindow = null;
 		// Set extension filter
 		try {
@@ -67,11 +75,27 @@ public class MainWindowController implements Initializable {
 
 		}
 
-		System.out.println("Button pressed: callback_loadJsonClassList");
+	}
+
+	public void callback_editGroundPlan() throws IOException {
+		System.out.println("Button pressed: callback_editGroundPlan");
+		tableGen = new ClassRoomGenerator(sel_numOfRows.getValue(), (2 * sel_desksPerRow.getValue()), true);
+		tableArray = tableGen.getSeatingTable();
+
 	}
 
 	public void callback_createSeatingChart() throws IOException {
 		System.out.println("Button pressed: callback_createSeatingChart");
+		if (tableGen == null) {
+			tableGen = new ClassRoomGenerator(sel_numOfRows.getValue(), (2 * sel_desksPerRow.getValue()), false);
+			System.out.println("get new table gen");
+
+		}
+		tableArray = tableGen.getSeatingTable();
+		btnArray = tableGen.getButtonTable().clone();
+		SeatingTableGenerator tableGUI = new SeatingTableGenerator(tableArray, classListHandler.copyClassList(classListHandler));
+	
+		tableGUI.CreateSeatTable();
 
 	}
 

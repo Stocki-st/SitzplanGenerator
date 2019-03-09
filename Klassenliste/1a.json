@@ -1,7 +1,7 @@
 {
   "0": {
-    "name": "Stefan Stockinger",
-    "firstRow": false,
+    "name": "Stefan Stöckinger",
+    "firstRow": true,
     "sitAlone": true,
     "forbiddenNeighbors": [
       "Elisabeth Koblmiller",
@@ -13,7 +13,7 @@
     "name": "Elisabeth Koblmiller",
     "firstRow": true,
     "sitAlone": false,
-    "fixedChair": "1.1",
+    "fixedChair": "2.3",
     "forbiddenNeighbors": [
       "Elisabeth Koblmiller",
       "Endro Moro",
@@ -22,6 +22,7 @@
   },
   "2": {
     "name": "Stefan Koblmiller"
+	"fixedChair": "1.2",
   },
   "3": {
     "name": "Endo Moro"
