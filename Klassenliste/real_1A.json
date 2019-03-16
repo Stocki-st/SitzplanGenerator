@@ -14,7 +14,7 @@
   "4": {
     "name": "FEITL Maximilian",
     "fixedChair": "1.1",
-	"sitAlone": true,
+	"sitAlone": true
   },
   "5": {
     "name": "GRÉTSI Gabriel"
@@ -53,7 +53,6 @@
   "16": {
     "name": "NEUBAUER Raphael",	
 	"fixedChair": "1.4"
-
   },
   "17": {
     "name": "RICHTER Chantal"

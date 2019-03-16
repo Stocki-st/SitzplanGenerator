@@ -21,16 +21,13 @@ public class ClassListHandler {
 		numOfStudents = 0;
 	}
 	
-	public ClassListHandler copyClassList (ClassListHandler list){
-		ClassListHandler classList = new ClassListHandler();
-		  //for all properties in FOo
-		  classList.studentList = (Vector<String>) list.studentList.clone();
-		  classList.firstRowList = (Vector<String>) list.firstRowList.clone();
-		  classList.sitAloneList = (Vector<String>) list.sitAloneList.clone();
-		  classList.fixedChairMap = new HashMap<String, String>(list.fixedChairMap);
-		  classList.forbiddenNeighborsMap = new HashMap<String, Vector<String>>(list.forbiddenNeighborsMap);
-	  
-		  return classList;
+	public ClassListHandler(ClassListHandler list) {
+	
+		  this.studentList = new Vector<String>(list.studentList);
+		  this.firstRowList = new Vector<String>( list.firstRowList);
+		  this.sitAloneList = new Vector<String>( list.sitAloneList);
+		  this.fixedChairMap = new HashMap<String, String>(list.fixedChairMap);
+		  this.forbiddenNeighborsMap = new HashMap<String, Vector<String>>(list.forbiddenNeighborsMap);
 		}
 
 	public int getNumOfStudents() {

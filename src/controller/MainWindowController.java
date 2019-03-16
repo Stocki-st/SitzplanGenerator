@@ -29,7 +29,8 @@ public class MainWindowController implements Initializable {
 	@FXML
 	private Spinner<Integer> sel_numOfRows, sel_desksPerRow;
 
-	final int initialValue = 3;
+	final int initialValueRows = 5;
+	final int initialValueTableaPerRow = 3;
 
 	String[][] tableArray = null;
 	Button[][] btnArray = null;
@@ -38,9 +39,9 @@ public class MainWindowController implements Initializable {
 
 	// Value factory.
 	SpinnerValueFactory<Integer> valueFactory_numOfRows = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 9,
-			initialValue);
+			initialValueRows);
 	SpinnerValueFactory<Integer> valueFactory_desksPerRow = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 9,
-			initialValue);
+			initialValueTableaPerRow);
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -93,9 +94,11 @@ public class MainWindowController implements Initializable {
 		}
 		tableArray = tableGen.getSeatingTable();
 		btnArray = tableGen.getButtonTable().clone();
-		SeatingTableGenerator tableGUI = new SeatingTableGenerator(tableArray, classListHandler.copyClassList(classListHandler));
-	
+		//SeatingTableGenerator tableGUI = new SeatingTableGenerator(tableArray, classListHandler.copyClassList(classListHandler));
+		SeatingTableGenerator tableGUI = new SeatingTableGenerator(tableArray, new ClassListHandler(classListHandler));
+		
 		tableGUI.CreateSeatTable();
+		
 
 	}
 

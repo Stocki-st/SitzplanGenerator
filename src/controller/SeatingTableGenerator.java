@@ -55,7 +55,8 @@ public class SeatingTableGenerator extends Application {
 
 		this.btn = new Button[seatsPerRow][rows];
 
-		this.classList = classList;
+		this.classList = new ClassListHandler(classList);
+		
 		System.out.println("in ctor");
 
 	}
@@ -227,7 +228,7 @@ public class SeatingTableGenerator extends Application {
 				throw new Exception(
 						"Du möchtest mehr Personen in die erste Reihe setzen, als es Plätze gibt! -> bitte Sitzplatz Konfiguration bearbeiten!");
 			do {
-				desiredChair = rn.nextInt(seatingTable.length - 1);
+				desiredChair = rn.nextInt(seatingTable.length);
 
 				System.out.println("desiredChair: " + desiredChair);
 
@@ -257,7 +258,7 @@ public class SeatingTableGenerator extends Application {
 				if (classList.studentList.isEmpty())
 					return;
 				if (isNullOrEmpty(seatingTable[j][row_])) {
-					int studentsLeft = classList.studentList.size() - 1;
+					int studentsLeft = classList.studentList.size();
 					if (studentsLeft > 0) {
 						studentIterator = rn.nextInt(studentsLeft);
 					} else {
@@ -370,7 +371,7 @@ public class SeatingTableGenerator extends Application {
 				System.out.println("i " + i);
 				System.out.println("j " + j);
 
-				btn[j][i] = new Button("a"); // String.valueOf(i + 1) + "." + String.valueOf(j + 1));
+				btn[j][i] = new Button(""); // String.valueOf(i + 1) + "." + String.valueOf(j + 1));
 				btn[j][i].setPrefSize(150, 50);
 				btn[j][i].setOnAction(new EventHandler<ActionEvent>() {
 
