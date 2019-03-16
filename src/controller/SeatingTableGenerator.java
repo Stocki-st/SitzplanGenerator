@@ -5,8 +5,11 @@ package controller;
 
 import java.awt.List;
 import java.awt.event.ActionListener;
+import java.awt.image.RenderedImage;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -40,7 +43,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.stage.FileChooser.ExtensionFilter;
 
 /**
  * @author mails
@@ -120,7 +125,7 @@ public class SeatingTableGenerator extends Application {
 
 		Button btn_ok = new Button("OK");
 		btn_ok.setPrefSize(90, 40);
-		Button btn_print = new Button("Drucken");
+		Button btn_print = new Button("Speichern");
 		btn_print.setPrefSize(90, 40);
 
 		Button btn_swap = new Button("vertauschen");
@@ -131,8 +136,8 @@ public class SeatingTableGenerator extends Application {
 			@Override
 			public void handle(ActionEvent event) {
 				System.out.println("print button pressed");
-				SaveSeatingTableToPdf(mainPane);
-
+				//SaveSeatingTableToPdf(mainPane);
+				SaveSeatingTableToImage(mainPane);
 			}
 
 		});
@@ -316,6 +321,49 @@ public class SeatingTableGenerator extends Application {
 		} catch (IOException e) {
 
 		}
+
+		PDDocument doc = new PDDocument();
+		PDPage page = new PDPage();
+		PDImageXObject pdimage;
+		PDPageContentStream content;
+		try {
+			pdimage = PDImageXObject.createFromFile("chart.png", doc);
+
+			content = new PDPageContentStream(doc, page);
+			content.drawImage(pdimage, 0, 0);
+			content.close();
+			doc.addPage(page);
+			doc.save("pdf_file.pdf");
+			doc.close();
+			file.delete();
+		} catch (IOException ex) {
+		}
+	}
+	
+	public void SaveSeatingTableToImage(Pane bar) {
+		  FileChooser fileChooser = new FileChooser();
+		  WritableImage nodeshot = bar.snapshot(new SnapshotParameters(), null);
+          //Set extension filter for text files
+          FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Image files (*.png)", "*.png");
+          fileChooser.getExtensionFilters().add(extFilter);
+     //Show save file dialog
+          final Stage primaryStage = new Stage();
+          File file = fileChooser.showSaveDialog(primaryStage);
+  		try {
+			ImageIO.write(SwingFXUtils.fromFXImage(nodeshot, null), "png", file );
+		} catch (IOException e) {
+
+		}
+          
+          
+
+		/*File file = new File("chart.png");
+
+		try {
+			ImageIO.write(SwingFXUtils.fromFXImage(nodeshot, null), "png", file);
+		} catch (IOException e) {
+
+		}*/
 
 		PDDocument doc = new PDDocument();
 		PDPage page = new PDPage();
