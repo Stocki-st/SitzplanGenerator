@@ -3,28 +3,16 @@
  */
 package controller;
 
-import java.awt.List;
-import java.awt.event.ActionListener;
-import java.awt.image.RenderedImage;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
-import javax.swing.text.AttributeSet.CharacterAttribute;
-
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
-import org.bouncycastle.asn1.eac.UnsignedInteger;
-
 import application.ClassListHandler;
 import javafx.application.Application;
 import javafx.embed.swing.SwingFXUtils;
@@ -38,6 +26,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -45,7 +35,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.stage.FileChooser.ExtensionFilter;
 
 /**
  * @author mails
@@ -58,10 +47,10 @@ public class SeatingTableGenerator extends Application {
 		this.rows = seatingTable[0].length;
 		this.seatingTable = seatingTable.clone();
 
-		this.btn = new Button[seatsPerRow][rows];
+		this.btn = new ToggleButton[seatsPerRow][rows];
 
 		this.classList = new ClassListHandler(classList);
-		
+
 		System.out.println("in ctor");
 
 	}
@@ -69,9 +58,11 @@ public class SeatingTableGenerator extends Application {
 	String[][] seatingTable;
 	int rows;
 	int seatsPerRow;
-	Button[][] btn;
+	ToggleButton[][] btn;
 	boolean showGUI;
 	ClassListHandler classList;
+	ToggleGroup btnGroup = new ToggleGroup();
+	Button btn_swap = new Button("vertauschen");
 
 	Stage stage = new Stage();
 
@@ -123,29 +114,56 @@ public class SeatingTableGenerator extends Application {
 		vbox.getChildren().add(gridPane);
 		HBox hbox = new HBox(25);
 
-		Button btn_ok = new Button("OK");
-		btn_ok.setPrefSize(90, 40);
+		btn_swap.setPrefSize(90, 40);
+		btn_swap.setDisable(true);
+		btn_swap.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				String selecti = null;
+				int nOfSelected = 0;
+				int row = 0;
+				int seat = 0;
+				System.out.println("swap button pressed");
+				for (int j = 0; j < seatsPerRow; j++) {
+					for (int i = 0; i < rows; i++) {
+						if (btn[j][i].isSelected()) {
+							System.out.println("button" + btn[j][i].getText() + " is selected ");
+							nOfSelected++;
+							if (nOfSelected == 1) {
+								selecti = btn[j][i].getText();
+								row = j;
+								seat = i;
+							} else if (nOfSelected == 2) {
+
+								btn[row][seat].setText(btn[j][i].getText());
+								btn[j][i].setText(selecti);
+								btn[row][seat].setSelected(false);
+								btn[j][i].setSelected(false);
+							}
+						}
+					}
+				}
+
+			}
+
+		});
+
 		Button btn_print = new Button("Speichern");
 		btn_print.setPrefSize(90, 40);
-
-		Button btn_swap = new Button("vertauschen");
-		btn_swap.setPrefSize(90, 40);
-
 		btn_print.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
 			public void handle(ActionEvent event) {
 				System.out.println("print button pressed");
-				//SaveSeatingTableToPdf(mainPane);
+				// SaveSeatingTableToPdf(mainPane);
 				SaveSeatingTableToImage(mainPane);
 			}
 
 		});
 
-		hbox.getChildren().add(btn_ok);
-		hbox.getChildren().add(btn_print);
-		hbox.getChildren().add(btn_swap);
-		hbox.setAlignment(Pos.CENTER);
+		Button btn_ok = new Button("OK");
+		btn_ok.setPrefSize(90, 40);
 		btn_ok.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -156,6 +174,11 @@ public class SeatingTableGenerator extends Application {
 			}
 
 		});
+
+		hbox.getChildren().add(btn_ok);
+		hbox.getChildren().add(btn_print);
+		hbox.getChildren().add(btn_swap);
+		hbox.setAlignment(Pos.CENTER);
 		vbox.getChildren().add(new Label(" "));
 		vbox.getChildren().add(hbox);
 
@@ -339,60 +362,35 @@ public class SeatingTableGenerator extends Application {
 		} catch (IOException ex) {
 		}
 	}
-	
+
 	public void SaveSeatingTableToImage(Pane bar) {
-		  FileChooser fileChooser = new FileChooser();
-		  WritableImage nodeshot = bar.snapshot(new SnapshotParameters(), null);
-          //Set extension filter for text files
-          FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Image files (*.png)", "*.png");
-          fileChooser.getExtensionFilters().add(extFilter);
-     //Show save file dialog
-          final Stage primaryStage = new Stage();
-          File file = fileChooser.showSaveDialog(primaryStage);
-  		try {
-			ImageIO.write(SwingFXUtils.fromFXImage(nodeshot, null), "png", file );
-		} catch (IOException e) {
-
-		}
-          
-          
-
-		/*File file = new File("chart.png");
-
 		try {
+			FileChooser fileChooser = new FileChooser();
+			WritableImage nodeshot = bar.snapshot(new SnapshotParameters(), null);
+			// Set extension filter for text files
+			FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Image files (*.png)", "*.png");
+			fileChooser.getExtensionFilters().add(extFilter);
+			// Show save file dialog
+			final Stage primaryStage = new Stage();
+			File file = fileChooser.showSaveDialog(primaryStage);
+
 			ImageIO.write(SwingFXUtils.fromFXImage(nodeshot, null), "png", file);
-		} catch (IOException e) {
+		} catch (Exception e) {
 
-		}*/
-
-		PDDocument doc = new PDDocument();
-		PDPage page = new PDPage();
-		PDImageXObject pdimage;
-		PDPageContentStream content;
-		try {
-			pdimage = PDImageXObject.createFromFile("chart.png", doc);
-
-			content = new PDPageContentStream(doc, page);
-			content.drawImage(pdimage, 0, 0);
-			content.close();
-			doc.addPage(page);
-			doc.save("pdf_file.pdf");
-			doc.close();
-			file.delete();
-		} catch (IOException ex) {
 		}
 	}
 
-	public void callback_toggleTableState(ActionEvent event) throws IOException {
-		/*
-		 * int i = 0; int j = 0;
-		 * 
-		 * System.out.println("button pressed");
-		 * 
-		 * if ("-".equals(btn[j][i].getText())) { btn[j][i].setText(j + "." + i);
-		 * 
-		 * } else { btn[j][i].setText("-"); }
-		 */
+	public int countSelectedButtons(ActionEvent event) throws IOException {
+		int nOfSelected = 0;
+		for (int j = 0; j < seatsPerRow; j++) {
+			for (int i = 0; i < rows; i++) {
+				if (btn[j][i].isSelected()) {
+					System.out.println(btn[j][i].getText() + " is selected ");
+					nOfSelected++;
+				}
+			}
+		}
+		return nOfSelected;
 	}
 
 	public void callback_CloseSeatTable(ActionEvent event) throws IOException {
@@ -409,9 +407,6 @@ public class SeatingTableGenerator extends Application {
 		int j = 0;
 		int x = 0;
 
-		System.out.println("rows " + rows);
-		System.out.println("seatsPerRow " + seatsPerRow);
-
 		for (j = 0; j < seatsPerRow; j++) {
 			x++;
 			for (i = 0; i < rows; i++) {
@@ -419,15 +414,22 @@ public class SeatingTableGenerator extends Application {
 				System.out.println("i " + i);
 				System.out.println("j " + j);
 
-				btn[j][i] = new Button(""); // String.valueOf(i + 1) + "." + String.valueOf(j + 1));
+				btn[j][i] = new ToggleButton(""); // String.valueOf(i + 1) + "." + String.valueOf(j + 1));
 				btn[j][i].setPrefSize(150, 50);
 				btn[j][i].setOnAction(new EventHandler<ActionEvent>() {
 
 					@Override
 					public void handle(ActionEvent event) {
 						System.out.println("button pressed");
+
 						try {
-							callback_toggleTableState(event);
+							if (countSelectedButtons(event) == 2) {
+								btn_swap.setDisable(false);
+
+							} else {
+								btn_swap.setDisable(true);
+
+							}
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -435,6 +437,7 @@ public class SeatingTableGenerator extends Application {
 
 					}
 				});
+
 				pane.add(btn[j][i], x, i);
 
 			}
