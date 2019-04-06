@@ -1,10 +1,12 @@
 package application;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -77,7 +79,7 @@ public class ClassListHandler {
 			throws IOException, ParseException, FileNotFoundException {
 		JSONParser parser = new JSONParser();
 		// Use JSONObject for simple JSON and JSONArray for array of JSON.
-		JSONObject data = (JSONObject) parser.parse(new FileReader(filename));
+		JSONObject data = (JSONObject) parser.parse(new BufferedReader(new InputStreamReader(new FileInputStream(filename), "UTF-8")));
 		return data;
 	}
 
