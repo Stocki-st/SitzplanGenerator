@@ -5,28 +5,79 @@
 <?import javafx.scene.control.Spinner?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="301.0" prefWidth="550.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainWindowController">
+<VBox prefHeight="400.0" prefWidth="640.0"
+	xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="controller.MainWindowController">
 	<children>
-		<Button fx:id="btn_loadClassList" layoutX="54.0" layoutY="96.0" mnemonicParsing="false" onMouseClicked="#callback_loadJsonClassList" text="Klassenliste laden" />
-		<Button fx:id="btn_generateSeatingChart" disable="true" layoutX="284.0" layoutY="216.0" mnemonicParsing="false" onMouseClicked="#callback_createSeatingChart" prefHeight="57.0" prefWidth="224.0" text="Sitzplan erstellen">
-			<font>
-				<Font size="13.0" />
-			</font>
-		</Button>
-		<Label layoutX="119.0" layoutY="14.0" prefHeight="43.0" prefWidth="312.0" text="Sitzplan Generator" textAlignment="JUSTIFY">
-			<font>
-				<Font name="Arial" size="37.0" />
-			</font>
-		</Label>
-		<Button fx:id="btn_editClassList" disable="true" layoutX="51.0" layoutY="132.0" mnemonicParsing="false" onMouseClicked="#callback_editClassList" text="Klassenliste bearbeiten" />
-		<Label fx:id="label_ClassList" layoutX="225.0" layoutY="100.0" text="...keine Liste geladen..." />
-		<Spinner fx:id="sel_numOfRows" layoutX="154.0" layoutY="177.0" prefHeight="25.0" prefWidth="58.0" />
-		<Label layoutX="54.0" layoutY="181.0" text="Anzahl Reihen" />
-		<Spinner fx:id="sel_desksPerRow" layoutX="154.0" layoutY="207.0" prefHeight="25.0" prefWidth="58.0" />
-		<Label layoutX="54.0" layoutY="211.0" text="Tische pro Reihe" />
-      <Label fx:id="label_numOfPersons" layoutX="225.0" layoutY="168.0" />
-      <Button fx:id="btn_editGroundPlan" layoutX="45.0" layoutY="244.0" mnemonicParsing="false" onMouseClicked="#callback_editGroundPlan" text="Grundriss bearbeiten" />
+		<MenuBar VBox.vgrow="NEVER">
+			<Menu mnemonicParsing="false" text="Klassenlisten">
+				<items>
+					<MenuItem mnemonicParsing="false" text="About MyHelloApp" />
+				</items>
+			</Menu>
+			<Menu mnemonicParsing="false" text="Help">
+				<items>
+					<MenuItem mnemonicParsing="false" text="About MyHelloApp" />
+				</items>
+			</Menu>
+			<Menu mnemonicParsing="false" text="About">
+				<items>
+					<MenuItem mnemonicParsing="false" text="About MyHelloApp" />
+				</items>
+			</Menu>
 
+		</MenuBar>
+		<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="339.0"
+			prefWidth="550.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+			<children>
+
+				<Button fx:id="btn_loadClassList" layoutX="42.0" layoutY="80.0"
+					mnemonicParsing="false" onMouseClicked="#callback_loadJsonClassList"
+					prefHeight="25.0" prefWidth="137.0" text="Klassenliste laden" />
+				<Button fx:id="btn_generateSeatingChart" disable="true"
+					layoutX="299.0" layoutY="252.0" mnemonicParsing="false"
+					onMouseClicked="#callback_createSeatingChart" prefHeight="57.0"
+					prefWidth="224.0" text="Sitzplan erstellen">
+					<font>
+						<Font size="13.0" />
+					</font>
+				</Button>
+				<Label layoutX="119.0" layoutY="14.0" prefHeight="43.0"
+					prefWidth="312.0" text="Sitzplan Generator" textAlignment="JUSTIFY">
+					<font>
+						<Font name="Arial" size="37.0" />
+					</font>
+				</Label>
+				<Button fx:id="btn_editClassList" disable="true" layoutX="42.0"
+					layoutY="164.0" mnemonicParsing="false" onMouseClicked="#callback_editClassList"
+					prefHeight="25.0" prefWidth="137.0" text="Klassenliste bearbeiten" />
+				<Label fx:id="label_ClassList" layoutX="219.0" layoutY="84.0"
+					text="...keine Liste geladen..." />
+				<Spinner fx:id="sel_numOfRows" layoutX="152.0" layoutY="213.0"
+					prefHeight="25.0" prefWidth="58.0" />
+				<Label layoutX="52.0" layoutY="217.0" text="Anzahl Reihen" />
+				<Spinner fx:id="sel_desksPerRow" layoutX="152.0" layoutY="243.0"
+					prefHeight="25.0" prefWidth="58.0" />
+				<Label layoutX="52.0" layoutY="247.0" text="Tische pro Reihe" />
+				<Label fx:id="label_numOfPersons" layoutX="225.0" layoutY="168.0" />
+				<Button fx:id="btn_editGroundPlan" layoutX="43.0" layoutY="280.0"
+					mnemonicParsing="false" onMouseClicked="#callback_editGroundPlan"
+					prefHeight="25.0" prefWidth="137.0" text="Grundriss bearbeiten" />
+				<Button fx:id="btn_createNewClassList" layoutX="42.0"
+					layoutY="121.0" mnemonicParsing="false" onMouseClicked="#callback_createNewClassList"
+					prefHeight="25.0" prefWidth="137.0" text="Klassenliste erstellen" />
+
+			</children>
+
+		</AnchorPane>
 	</children>
-</AnchorPane>
+</VBox>

@@ -140,6 +140,7 @@ public class SeatingTableGenerator extends Application {
 								btn[j][i].setText(selecti);
 								btn[row][seat].setSelected(false);
 								btn[j][i].setSelected(false);
+								btn_swap.setDisable(true);
 							}
 						}
 					}
@@ -283,25 +284,25 @@ public class SeatingTableGenerator extends Application {
 			for (int j = 0; j < seatingTable.length; j++) {
 				System.out.println("i: " + row_ + " j: " + j);
 
-				if (classList.studentList.isEmpty())
+				if (ClassListHandler.studentList.isEmpty())
 					return;
 				if (isNullOrEmpty(seatingTable[j][row_])) {
-					int studentsLeft = classList.studentList.size();
+					int studentsLeft = ClassListHandler.studentList.size();
 					if (studentsLeft > 0) {
 						studentIterator = rn.nextInt(studentsLeft);
 					} else {
 						studentIterator = 0;
 					}
 
-					if (classList.studentList.isEmpty()) {
+					if (ClassListHandler.studentList.isEmpty()) {
 						return;
 					} else {
-						String name = classList.studentList.get(studentIterator);
+						String name = ClassListHandler.studentList.get(studentIterator);
 
 						btn[j][row_].setText(name);
 						seatingTable[j][row_] = name;
 						checkSitAloneFlag(j, row_, name);
-						classList.studentList.remove(classList.studentList.get(studentIterator));
+						ClassListHandler.studentList.remove(ClassListHandler.studentList.get(studentIterator));
 						if (studentsLeft == 0)
 							return;
 					}
@@ -317,7 +318,7 @@ public class SeatingTableGenerator extends Application {
 	 * @param name
 	 */
 	public void checkSitAloneFlag(int row, int chair, String name) {
-		if (classList.sitAloneList.contains(name)) {
+		if (ClassListHandler.sitAloneList.contains(name)) {
 			if ((chair & 1) == 0) {
 				btn[chair - 2][row - 1].setText("-");
 				seatingTable[chair - 2][row - 1] = "-";

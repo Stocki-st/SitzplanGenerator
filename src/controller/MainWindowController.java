@@ -6,15 +6,22 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import application.ClassListHandler;
-import application.ClassRoomGenerator;
+import application.Main;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
+import javafx.stage.Stage;
 import javafx.stage.Window;
 
 public class MainWindowController implements Initializable {
@@ -22,7 +29,8 @@ public class MainWindowController implements Initializable {
 	ClassListHandler classListHandler = new ClassListHandler();
 
 	@FXML
-	private Button btn_editClassList, btn_generateSeatingChart, btn_loadClassList, btn_editGroundPlan;
+	private Button btn_editClassList, btn_generateSeatingChart, btn_loadClassList, btn_editGroundPlan,
+			btn_createNewClassList;
 	@FXML
 	private Label label_ClassList, label_numOfPersons;
 
@@ -62,20 +70,24 @@ public class MainWindowController implements Initializable {
 			File file = fileChooser.showOpenDialog(dummyWindow);
 
 			classListHandler.setClassListFilename(file.getPath());
-			setLabel_ClassList(ClassListHandler.getClassListFilename());
-			int numOfStudents = ClassListHandler.loadClassList();
-			setLabel_numOfPersons(numOfStudents + " Personen geladen");
-			if (numOfStudents > 0) {
-				btn_generateSeatingChart.setDisable(false);
-			} else {
-				btn_generateSeatingChart.setDisable(true);
-
-			}
+			loadClasslistFromJson(classListHandler.getClassListFilename());
 		} catch (Exception e) {
 			btn_generateSeatingChart.setDisable(true);
 
 		}
 
+	}
+
+	private void loadClasslistFromJson(String file) {
+		setLabel_ClassList(file);
+		int numOfStudents = ClassListHandler.loadClassList(file);
+		setLabel_numOfPersons(numOfStudents + " Personen geladen");
+		if (numOfStudents > 0) {
+			btn_generateSeatingChart.setDisable(false);
+		} else {
+			btn_generateSeatingChart.setDisable(true);
+
+		}
 	}
 
 	public void callback_editGroundPlan() throws IOException {
@@ -94,16 +106,32 @@ public class MainWindowController implements Initializable {
 		}
 		tableArray = tableGen.getSeatingTable();
 		btnArray = tableGen.getButtonTable().clone();
-		//SeatingTableGenerator tableGUI = new SeatingTableGenerator(tableArray, classListHandler.copyClassList(classListHandler));
+		// SeatingTableGenerator tableGUI = new SeatingTableGenerator(tableArray,
+		// classListHandler.copyClassList(classListHandler));
 		SeatingTableGenerator tableGUI = new SeatingTableGenerator(tableArray, new ClassListHandler(classListHandler));
-		
+
 		tableGUI.CreateSeatTable();
-		
 
 	}
 
 	public void callback_editClassList() throws IOException {
 		System.out.println("Button pressed: callback_editClassList");
+		label_ClassList.setWrapText(true);
+	}
+
+	public void callback_createNewClassList() throws IOException {
+		System.out.println("Button pressed: callback_createNewClassList");
+
+		try {
+
+			NewClassListController ctrl = new NewClassListController();
+			loadClasslistFromJson(ctrl.getClassListFilename());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		// Hide this current window (if this is what you want)
+		// ((Node)(event.getSource())).getScene().getWindow().hide();
 
 	}
 
