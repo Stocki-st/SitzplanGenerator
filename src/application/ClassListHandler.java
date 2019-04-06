@@ -20,15 +20,15 @@ public class ClassListHandler {
 	public ClassListHandler() {
 		numOfStudents = 0;
 	}
-	
+
 	public ClassListHandler(ClassListHandler list) {
-	
-		  this.studentList = new Vector<String>(list.studentList);
-		  this.firstRowList = new Vector<String>( list.firstRowList);
-		  this.sitAloneList = new Vector<String>( list.sitAloneList);
-		  this.fixedChairMap = new HashMap<String, String>(list.fixedChairMap);
-		  this.forbiddenNeighborsMap = new HashMap<String, Vector<String>>(list.forbiddenNeighborsMap);
-		}
+
+		this.studentList = new Vector<String>(list.studentList);
+		this.firstRowList = new Vector<String>(list.firstRowList);
+		this.sitAloneList = new Vector<String>(list.sitAloneList);
+		this.fixedChairMap = new HashMap<String, String>(list.fixedChairMap);
+		this.forbiddenNeighborsMap = new HashMap<String, Vector<String>>(list.forbiddenNeighborsMap);
+	}
 
 	public int getNumOfStudents() {
 		return numOfStudents;
@@ -45,7 +45,7 @@ public class ClassListHandler {
 	public static Map<String, Vector<String>> forbiddenNeighborsMap = new HashMap<String, Vector<String>>();
 
 	private static int numOfStudents;
-	private static String classListFilename = "C:/Users/mails/Projekte/seating-chart-generator/1a.json";
+	private static String classListFilename;
 
 	private static void writeStudentListToJson(String filename, JSONObject data) throws IOException {
 		FileWriter file = new FileWriter(filename);
@@ -70,7 +70,7 @@ public class ClassListHandler {
 			sitAloneList.remove(index);
 		}
 
-		//fixedChairMap.remove(name);
+		// fixedChairMap.remove(name);
 	}
 
 	private static JSONObject readStudentListFromJson(String filename)
@@ -81,13 +81,13 @@ public class ClassListHandler {
 		return data;
 	}
 
-	public static int loadClassList() {
+	@SuppressWarnings("unchecked")
+	public static int loadClassList(String filename) {
 		JSONObject data;
 		int id = 0;
 		try {
-			data = readStudentListFromJson(getClassListFilename());
-			String json = data.toJSONString();
 
+			data = readStudentListFromJson(filename);
 			JSONObject student = (JSONObject) data.get(Integer.toString(id));
 			while (student != null) {
 				System.out.println(student);

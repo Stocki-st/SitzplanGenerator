@@ -6,6 +6,7 @@ import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 
 public class Main extends Application {
 	public static void main(String[] args) {
@@ -15,16 +16,13 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			AnchorPane mainPane = (AnchorPane) FXMLLoader.load(Main.class.getResource("MainWindow.fxml"));
+			VBox mainPane = FXMLLoader.load(Main.class.getResource("MainWindow.fxml"));
 			primaryStage.setTitle("Sitzplan Generator");
 			primaryStage.getIcons().add(new Image("file:src/application/ship-icon.png"));
+			primaryStage.setResizable(false);
 
 			primaryStage.setScene(new Scene(mainPane));
 			primaryStage.show();
-			/*GeneratedTableGUI table = new GeneratedTableGUI() ;
-			table.SaveSeatingTableToPdf(mainPane);*/
-
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
