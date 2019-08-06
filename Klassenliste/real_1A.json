@@ -3,7 +3,8 @@
     "name": "AKKAYA Sara",
   },
   "1": {
-    "name": "ANDREJS Leontina",
+    "name": "ANDREJS Leontina",,
+	"sitAlone": true
   },
   "2": {
     "name": "BLÄUMAUER Nathalie"
@@ -23,7 +24,8 @@
     "name": "HAIZINGER Felix"
   },
   "7": {
-    "name": "HELL Tobias"
+    "name": "HELL Tobias",
+	"sitAlone": true
   },
   "8": {
     "name": "HULEA Alexandru-Vlad"
@@ -45,7 +47,8 @@
     "name": "MAHMOODI Benjamin"
   },
   "14": {
-    "name": "MAHRHOFER Maximilian"
+    "name": "MAHRHOFER Maximilian",
+	"sitAlone": true
   },
   "15": {
     "name": "MIHALCEA Amalia"

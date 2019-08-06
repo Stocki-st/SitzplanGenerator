@@ -3,7 +3,6 @@ package controller;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.OutputStreamWriter;
 
 import org.json.*;
@@ -128,8 +127,7 @@ public class NewClassListController extends Application {
 			JSONObject entry = new JSONObject();
 			// read name line by line
 			// throw empty lines
-			JSONObject classlist = new JSONObject();
-
+			
 			int id = 0;
 			for (String line : text_newClassList.getText().split("\\n")) {
 				if (line.length() > 3) {
@@ -142,6 +140,7 @@ public class NewClassListController extends Application {
 				}
 			}
 
+			@SuppressWarnings("resource")
 			BufferedWriter filewriter = new BufferedWriter(
 					new OutputStreamWriter(new FileOutputStream(file), "UTF-8"));
 

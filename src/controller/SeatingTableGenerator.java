@@ -49,7 +49,7 @@ public class SeatingTableGenerator extends Application {
 
 		this.btn = new ToggleButton[seatsPerRow][rows];
 
-		this.classList = new ClassListHandler(classList);
+		this.classList = classList;
 
 		System.out.println("in ctor");
 
@@ -219,7 +219,7 @@ public class SeatingTableGenerator extends Application {
 		// sit fixed chairs
 		int row = 0;
 		int chair = 0;
-		for (Entry<String, String> mapEntry : ClassListHandler.fixedChairMap.entrySet()) {
+		for (Entry<String, String> mapEntry : classList.fixedChairMap.entrySet()) {
 			String chair_as_String = mapEntry.getValue();
 			String name = mapEntry.getKey();
 			System.out.println(name + ": " + chair_as_String);
@@ -231,14 +231,14 @@ public class SeatingTableGenerator extends Application {
 			System.out.println("chair: " + chair);
 
 			if (!isNullOrEmpty(seatingTable[chair - 1][row - 1])) {
-				throw new Exception("Du möchtest " + name
+				throw new Exception("Du mï¿½chtest " + name
 						+ " auf einen bereits vergebenen oder nicht vorhandenen Platz setzen! -> bitte Sitzplatz Konfiguration bearbeiten!");
 			}
 
 			btn[chair - 1][row - 1].setText(name);
 			seatingTable[chair - 1][row - 1] = name;
 			checkSitAloneFlag(row, chair, name);
-			ClassListHandler.removeNameFromLists(name);
+			classList.removeNameFromLists(name);
 		}
 
 		// sit first row
@@ -248,14 +248,14 @@ public class SeatingTableGenerator extends Application {
 			if (isNullOrEmpty(seatingTable[i][0]))
 				empty_chairs++;
 		}
-		for (String name : ClassListHandler.firstRowList) {
+		for (String name : classList.firstRowList) {
 			System.out.println("first row: " + name);
 
 			Random rn = new Random();
 			int desiredChair = 0;
 			if (--empty_chairs <= 0)
 				throw new Exception(
-						"Du möchtest mehr Personen in die erste Reihe setzen, als es Plätze gibt! -> bitte Sitzplatz Konfiguration bearbeiten!");
+						"Du mï¿½chtest mehr Personen in die erste Reihe setzen, als es Plï¿½tze gibt! -> bitte Sitzplatz Konfiguration bearbeiten!");
 			do {
 				desiredChair = rn.nextInt(seatingTable.length);
 
@@ -266,7 +266,7 @@ public class SeatingTableGenerator extends Application {
 			btn[desiredChair][0].setText(name);
 			seatingTable[desiredChair][0] = name;
 			checkSitAloneFlag(row, chair, name);
-			ClassListHandler.removeNameFromLists(name);
+			classList.removeNameFromLists(name);
 		}
 
 		// sit allone
@@ -284,25 +284,25 @@ public class SeatingTableGenerator extends Application {
 			for (int j = 0; j < seatingTable.length; j++) {
 				System.out.println("i: " + row_ + " j: " + j);
 
-				if (ClassListHandler.studentList.isEmpty())
+				if (classList.studentList.isEmpty())
 					return;
 				if (isNullOrEmpty(seatingTable[j][row_])) {
-					int studentsLeft = ClassListHandler.studentList.size();
+					int studentsLeft = classList.studentList.size();
 					if (studentsLeft > 0) {
 						studentIterator = rn.nextInt(studentsLeft);
 					} else {
 						studentIterator = 0;
 					}
 
-					if (ClassListHandler.studentList.isEmpty()) {
+					if (classList.studentList.isEmpty()) {
 						return;
 					} else {
-						String name = ClassListHandler.studentList.get(studentIterator);
+						String name = classList.studentList.get(studentIterator);
 
 						btn[j][row_].setText(name);
 						seatingTable[j][row_] = name;
 						checkSitAloneFlag(j, row_, name);
-						ClassListHandler.studentList.remove(ClassListHandler.studentList.get(studentIterator));
+						classList.studentList.remove(classList.studentList.get(studentIterator));
 						if (studentsLeft == 0)
 							return;
 					}
@@ -318,7 +318,7 @@ public class SeatingTableGenerator extends Application {
 	 * @param name
 	 */
 	public void checkSitAloneFlag(int row, int chair, String name) {
-		if (ClassListHandler.sitAloneList.contains(name)) {
+		/*if (ClassListHandler.sitAloneList.contains(name)) {
 			if ((chair & 1) == 0) {
 				btn[chair - 2][row - 1].setText("-");
 				seatingTable[chair - 2][row - 1] = "-";
@@ -326,7 +326,7 @@ public class SeatingTableGenerator extends Application {
 				btn[chair][row - 1].setText("-");
 				seatingTable[chair][row - 1] = "-";
 			}
-		}
+		}*/
 	}
 
 	public static boolean isNullOrEmpty(String str) {

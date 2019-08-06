@@ -3,7 +3,6 @@ package application;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -23,13 +22,48 @@ public class ClassListHandler {
 		numOfStudents = 0;
 	}
 
-	public ClassListHandler(ClassListHandler list) {
+	public class Classlists {
 
-		this.studentList = new Vector<String>(list.studentList);
-		this.firstRowList = new Vector<String>(list.firstRowList);
-		this.sitAloneList = new Vector<String>(list.sitAloneList);
-		this.fixedChairMap = new HashMap<String, String>(list.fixedChairMap);
-		this.forbiddenNeighborsMap = new HashMap<String, Vector<String>>(list.forbiddenNeighborsMap);
+	}
+
+	public ClassListHandler getClassLists() {
+		for (Student studi : studentArray) {
+			String name = studi.getName();
+			studentList.add(name);
+
+			String fixedChair = studi.getFixedChair();
+			if (!fixedChair.isEmpty()) { // or != null ?
+				fixedChairMap.put(name, fixedChair);
+			}
+
+			if (studi.isFirstRow()) {
+				firstRowList.add(name);
+			}
+
+			if (studi.isSitAlone()) {
+				sitAloneList.add(name);
+			}
+			Vector<String> forbiddenPersons = studi.getForbiddenNeighbours();
+
+			try {
+			if (!forbiddenPersons.isEmpty()) {
+				forbiddenNeighborsMap.put(name, forbiddenPersons);
+			}
+			}catch(Exception e) {
+				
+			}
+
+		}
+		return this;
+
+	}
+
+	public static Vector<String> getStudentList() {
+		Vector<String> tmp = new Vector<>();
+		for (String student : studentList) {
+			tmp.add(student);
+		}
+		return tmp;
 	}
 
 	public int getNumOfStudents() {
@@ -40,6 +74,7 @@ public class ClassListHandler {
 		numOfStudents = num;
 	}
 
+	private static Vector<Student> studentArray = new Vector<>();
 	public static Vector<String> studentList = new Vector<>();
 	public static Vector<String> firstRowList = new Vector<>();
 	public static Vector<String> sitAloneList = new Vector<>();
@@ -49,7 +84,9 @@ public class ClassListHandler {
 	private static int numOfStudents;
 	private static String classListFilename;
 
+	@SuppressWarnings("unused")
 	private static void writeStudentListToJson(String filename, JSONObject data) throws IOException {
+		@SuppressWarnings("resource")
 		FileWriter file = new FileWriter(filename);
 		file.write(data.toJSONString());
 		file.flush();
@@ -79,7 +116,8 @@ public class ClassListHandler {
 			throws IOException, ParseException, FileNotFoundException {
 		JSONParser parser = new JSONParser();
 		// Use JSONObject for simple JSON and JSONArray for array of JSON.
-		JSONObject data = (JSONObject) parser.parse(new BufferedReader(new InputStreamReader(new FileInputStream(filename), "UTF-8")));
+		JSONObject data = (JSONObject) parser
+				.parse(new BufferedReader(new InputStreamReader(new FileInputStream(filename), "UTF-8")));
 		return data;
 	}
 
@@ -90,40 +128,63 @@ public class ClassListHandler {
 		try {
 
 			data = readStudentListFromJson(filename);
-			JSONObject student = (JSONObject) data.get(Integer.toString(id));
-			while (student != null) {
-				System.out.println(student);
-				String name = (String) student.get("name");
-				System.out.println(name);
-				studentList.add(name);
+			JSONObject studentJsonObject = (JSONObject) data.get(Integer.toString(id));
+			while (studentJsonObject != null) {
 
-				String fixedChair = (String) student.get("fixedChair");
-				if (fixedChair != null) {
-					fixedChairMap.put(name, fixedChair);
-				}
+				System.out.println(studentJsonObject);
 
-				boolean sitAlone = (boolean) student.getOrDefault("sitAlone", false);
-				if (sitAlone == true) {
-					sitAloneList.add(name);
-				}
+				// SitAloneFlag sitAlone = (SitAloneFlag)
+				// studentJsonObject.getOrDefault("sitAlone", false);
+				// SitFirstRowFlag firstRow = (SitFirstRowFlag)
+				// studentJsonObject.getOrDefault("firstRow", false);
+				// StudentName name = (StudentName) studentJsonObject.get("name");
+				String name = (String) studentJsonObject.get("name");
+				boolean sitAlone = (boolean) studentJsonObject.getOrDefault("sitAlone", false);
+				boolean firstRow = (boolean) studentJsonObject.getOrDefault("firstRow", false);
 
-				boolean firstRow = (boolean) student.getOrDefault("firstRow", false);
-				if (firstRow == true) {
-					firstRowList.add(name);
-				}
+				String fixedChair = (String) studentJsonObject.getOrDefault("fixedChair", "");
 
-				JSONArray forbiddenNeighbors = (JSONArray) student.getOrDefault("forbiddenNeighbors", null);
+				Vector<String> forbiddenPersons = new Vector<String>();
+				JSONArray forbiddenNeighbors = (JSONArray) studentJsonObject.getOrDefault("forbiddenNeighbors", null);
 				if (forbiddenNeighbors != null) {
-					Vector<String> forbiddenPersons = new Vector<>();
 					Iterator<String> iterator = forbiddenNeighbors.iterator();
 					while (iterator.hasNext()) {
 						forbiddenPersons.add(iterator.next());
 					}
-					forbiddenNeighborsMap.put(name, forbiddenPersons);
+					// forbiddenNeighborsMap.put(name, forbiddenPersons);
+				} else {
+					forbiddenPersons.add("");
 				}
+
+				Student tempStudent = new Student(name, sitAlone, firstRow, fixedChair, null);
+				studentArray.add(tempStudent);
+
+				System.out.println(studentJsonObject);
+				// String name = (String) studentJsonObject.get("name");
+				System.out.println(name);
+				// studentList.add(name);
+
+				/*
+				 * String fixedChair = (String) studentJsonObject.get("fixedChair"); if
+				 * (fixedChair != null) { fixedChairMap.put(name, fixedChair); }
+				 * 
+				 * boolean sitAlone = (boolean) studentJsonObject.getOrDefault("sitAlone",
+				 * false); if (sitAlone == true) { sitAloneList.add(name); }
+				 * 
+				 * boolean firstRow = (boolean) studentJsonObject.getOrDefault("firstRow",
+				 * false); if (firstRow == true) { firstRowList.add(name); }
+				 * 
+				 * JSONArray forbiddenNeighbors = (JSONArray)
+				 * studentJsonObject.getOrDefault("forbiddenNeighbors", null); if
+				 * (forbiddenNeighbors != null) { Vector<String> forbiddenPersons = new
+				 * Vector<>(); Iterator<String> iterator = forbiddenNeighbors.iterator(); while
+				 * (iterator.hasNext()) { forbiddenPersons.add(iterator.next()); }
+				 * forbiddenNeighborsMap.put(name, forbiddenPersons); }
+				 */
 				++id;
-				student = (JSONObject) data.get(Integer.toString(id));
+				studentJsonObject = (JSONObject) data.get(Integer.toString(id));
 			}
+
 			setNumOfStudents(id);
 
 		} catch (IOException | ParseException e) {

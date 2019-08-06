@@ -108,7 +108,7 @@ public class MainWindowController implements Initializable {
 		btnArray = tableGen.getButtonTable().clone();
 		// SeatingTableGenerator tableGUI = new SeatingTableGenerator(tableArray,
 		// classListHandler.copyClassList(classListHandler));
-		SeatingTableGenerator tableGUI = new SeatingTableGenerator(tableArray, new ClassListHandler(classListHandler));
+		SeatingTableGenerator tableGUI = new SeatingTableGenerator(tableArray, classListHandler.getClassLists());
 
 		tableGUI.CreateSeatTable();
 
