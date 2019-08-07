@@ -196,64 +196,58 @@ public class SeatingTableGenerator extends Application {
 	public void SeatTheBeasts() throws Exception {
 
 		// disable unavailable tables
-		for (int i = 0; i < seatingTable.length; i++) {
-			for (int j = 0; j < seatingTable[0].length; j++) {
+		for (int row = 0; row < seatingTable.length; row++) {
+			for (int chair = 0; chair < seatingTable[0].length; chair++) {
 
-				System.out.println(i + "." + j + ": " + seatingTable[i][j]);
+				System.out.println(row + "." + chair + ": " + seatingTable[row][chair]);
 
-				if ("-".equals(seatingTable[i][j])) {
-
-					System.out.println("equals");
-
-					btn[i][j].setText(" ");
-					btn[i][j].setDisable(true);
-					seatingTable[i][j] = "-";
+				if ("-".equals(seatingTable[row][chair])) {
+					btn[row][chair].setText(" ");
+					btn[row][chair].setDisable(true);
+					seatingTable[row][chair] = "-";
 				}
 			}
 		}
 
-		int empty_chairs = 0;
-
 		// sit fixed chairs
-		int row = 0;
-		int chair = 0;
+		int fixedRow = 0;
+		int fixedChair = 0;
 		for (Entry<String, String> mapEntry : classList.fixedChairMap.entrySet()) {
 			String chair_as_String = mapEntry.getValue();
 			String name = mapEntry.getKey();
 			System.out.println(name + ": " + chair_as_String);
 
-			row = Integer.parseInt(chair_as_String.substring(0, chair_as_String.indexOf('.')).trim());
-			chair = Integer.parseInt(
+			fixedRow = Integer.parseInt(chair_as_String.substring(0, chair_as_String.indexOf('.')).trim());
+			fixedChair = Integer.parseInt(
 					chair_as_String.substring(chair_as_String.indexOf('.') + 1, chair_as_String.length()).trim());
-			System.out.println("row: " + row);
-			System.out.println("chair: " + chair);
+			System.out.println("row: " + fixedRow);
+			System.out.println("chair: " + fixedChair);
 
-			if (!isNullOrEmpty(seatingTable[chair - 1][row - 1])) {
+			if (!isNullOrEmpty(seatingTable[fixedChair - 1][fixedRow - 1])) {
 				throw new Exception("Du möchtest " + name
 						+ " auf einen bereits vergebenen oder nicht vorhandenen Platz setzen! -> bitte Sitzplatz Konfiguration bearbeiten!");
 			}
 
-			btn[chair - 1][row - 1].setText(name);
-			seatingTable[chair - 1][row - 1] = name;
-			checkSitAloneFlag(row, chair, name);
+			btn[fixedChair - 1][fixedRow - 1].setText(name);
+			seatingTable[fixedChair - 1][fixedRow - 1] = name;
+			checkSitAloneFlag(fixedRow, fixedChair, name);
 			classList.removeNameFromLists(name);
 		}
 
 		// sit first row
-		empty_chairs = 0;
-
-		for (int i = 0; i < seatingTable.length; i++) {
-			if (isNullOrEmpty(seatingTable[i][0]))
-				empty_chairs++;
+		int emptyChairs = 0;
+		for (int chair = 0; chair < seatingTable.length; chair++) {
+			if (isNullOrEmpty(seatingTable[chair][0]))
+				emptyChairs++;
 		}
 		for (String name : classList.firstRowList) {
 			System.out.println("first row: " + name);
 
 			Random rn = new Random();
 			int desiredChair = 0;
-			if (--empty_chairs <= 0)
+			if (--emptyChairs <= 0)
 				throw new Exception(
-						"Du m�chtest mehr Personen in die erste Reihe setzen, als es Pl�tze gibt! -> bitte Sitzplatz Konfiguration bearbeiten!");
+						"Du möchtest mehr Personen in die erste Reihe setzen, als es Pl�tze gibt! -> bitte Sitzplatz Konfiguration bearbeiten!");
 			do {
 				desiredChair = rn.nextInt(seatingTable.length);
 
@@ -263,7 +257,7 @@ public class SeatingTableGenerator extends Application {
 
 			btn[desiredChair][0].setText(name);
 			seatingTable[desiredChair][0] = name;
-			checkSitAloneFlag(row, chair, name);
+			checkSitAloneFlag(fixedRow, fixedChair, name);
 			classList.removeNameFromLists(name);
 		}
 
@@ -275,7 +269,6 @@ public class SeatingTableGenerator extends Application {
 
 		// sit all
 		int studentIterator = 0;
-		empty_chairs = 0;
 		Random rn = new Random();
 
 		for (int row_ = 0; row_ < seatingTable[0].length; row_++) {
@@ -316,15 +309,12 @@ public class SeatingTableGenerator extends Application {
 	 * @param name
 	 */
 	public void checkSitAloneFlag(int row, int chair, String name) {
-		/*if (ClassListHandler.sitAloneList.contains(name)) {
-			if ((chair & 1) == 0) {
-				btn[chair - 2][row - 1].setText("-");
-				seatingTable[chair - 2][row - 1] = "-";
-			} else {
-				btn[chair][row - 1].setText("-");
-				seatingTable[chair][row - 1] = "-";
-			}
-		}*/
+		/*
+		 * if (ClassListHandler.sitAloneList.contains(name)) { if ((chair & 1) == 0) {
+		 * btn[chair - 2][row - 1].setText("-"); seatingTable[chair - 2][row - 1] = "-";
+		 * } else { btn[chair][row - 1].setText("-"); seatingTable[chair][row - 1] =
+		 * "-"; } }
+		 */
 	}
 
 	public static boolean isNullOrEmpty(String str) {
@@ -381,10 +371,10 @@ public class SeatingTableGenerator extends Application {
 
 	public int countSelectedButtons(ActionEvent event) throws IOException {
 		int nOfSelected = 0;
-		for (int j = 0; j < seatsPerRow; j++) {
-			for (int i = 0; i < rows; i++) {
-				if (btn[j][i].isSelected()) {
-					System.out.println(btn[j][i].getText() + " is selected ");
+		for (int chair = 0; chair < seatsPerRow; chair++) {
+			for (int row = 0; row < rows; row++) {
+				if (btn[chair][row].isSelected()) {
+					System.out.println(btn[chair][row].getText() + " is selected ");
 					nOfSelected++;
 				}
 			}
@@ -402,47 +392,36 @@ public class SeatingTableGenerator extends Application {
 	}
 
 	void drawClassrom(GridPane pane) {
-		int i = 0;
-		int j = 0;
-		int x = 0;
+		int row = 0;
+		int chair = 0;
+		int chairWithSpace = 0;
 
-		for (j = 0; j < seatsPerRow; j++) {
-			x++;
-			for (i = 0; i < rows; i++) {
-
-				System.out.println("i " + i);
-				System.out.println("j " + j);
-
-				btn[j][i] = new ToggleButton(""); // String.valueOf(i + 1) + "." + String.valueOf(j + 1));
-				btn[j][i].setPrefSize(150, 50);
-				btn[j][i].setOnAction(new EventHandler<ActionEvent>() {
+		for (chair = 0; chair < seatsPerRow; chair++) {
+			chairWithSpace++;
+			for (row = 0; row < rows; row++) {
+				btn[chair][row] = new ToggleButton(""); // String.valueOf(i + 1) + "." + String.valueOf(j + 1));
+				btn[chair][row].setPrefSize(150, 50);
+				btn[chair][row].setOnAction(new EventHandler<ActionEvent>() {
 
 					@Override
 					public void handle(ActionEvent event) {
-						System.out.println("button pressed");
-
 						try {
 							if (countSelectedButtons(event) == 2) {
 								btn_swap.setDisable(false);
-
 							} else {
 								btn_swap.setDisable(true);
-
 							}
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-
 					}
 				});
-
-				pane.add(btn[j][i], x, i);
-
+				pane.add(btn[chair][row], chairWithSpace, row);
 			}
-			if (((j % 2) != 0) && (j < seatsPerRow - 1)) {
-				x++;
-				pane.add(new Label("               "), x, i);
+			if (((chair % 2) != 0) && (chair < seatsPerRow - 1)) {
+				chairWithSpace++;
+				pane.add(new Label("               "), chairWithSpace, row);
 			}
 
 		}
