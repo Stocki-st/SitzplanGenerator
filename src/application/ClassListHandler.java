@@ -18,6 +18,16 @@ import org.json.simple.parser.ParseException;
 
 public class ClassListHandler {
 
+	private Vector<Student> studentArray = new Vector<>();
+	public static Vector<String> studentList = new Vector<>();
+	public Vector<String> firstRowList = new Vector<>();
+	public Vector<String> sitAloneList = new Vector<>();
+	public Map<String, String> fixedChairMap = new HashMap<String, String>();
+	public  Map<String, Vector<String>> forbiddenNeighborsMap = new HashMap<String, Vector<String>>();
+
+	private static int numOfStudents;
+	private static String classListFilename;
+	
 	public ClassListHandler() {
 		numOfStudents = 0;
 	}
@@ -46,11 +56,11 @@ public class ClassListHandler {
 			Vector<String> forbiddenPersons = studi.getForbiddenNeighbours();
 
 			try {
-			if (!forbiddenPersons.isEmpty()) {
-				forbiddenNeighborsMap.put(name, forbiddenPersons);
-			}
-			}catch(Exception e) {
-				
+				if (!forbiddenPersons.isEmpty()) {
+					forbiddenNeighborsMap.put(name, forbiddenPersons);
+				}
+			} catch (Exception e) {
+
 			}
 
 		}
@@ -74,15 +84,7 @@ public class ClassListHandler {
 		numOfStudents = num;
 	}
 
-	private static Vector<Student> studentArray = new Vector<>();
-	public static Vector<String> studentList = new Vector<>();
-	public static Vector<String> firstRowList = new Vector<>();
-	public static Vector<String> sitAloneList = new Vector<>();
-	public static Map<String, String> fixedChairMap = new HashMap<String, String>();
-	public static Map<String, Vector<String>> forbiddenNeighborsMap = new HashMap<String, Vector<String>>();
-
-	private static int numOfStudents;
-	private static String classListFilename;
+	
 
 	@SuppressWarnings("unused")
 	private static void writeStudentListToJson(String filename, JSONObject data) throws IOException {
@@ -92,7 +94,7 @@ public class ClassListHandler {
 		file.flush();
 	}
 
-	public static void removeNameFromLists(String name) {
+	public void removeNameFromLists(String name) {
 		int index = 0;
 		index = studentList.indexOf(name);
 		if (index > 0) {
@@ -122,7 +124,7 @@ public class ClassListHandler {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static int loadClassList(String filename) {
+	public int loadClassList(String filename) {
 		JSONObject data;
 		int id = 0;
 		try {
@@ -130,18 +132,10 @@ public class ClassListHandler {
 			data = readStudentListFromJson(filename);
 			JSONObject studentJsonObject = (JSONObject) data.get(Integer.toString(id));
 			while (studentJsonObject != null) {
-
 				System.out.println(studentJsonObject);
-
-				// SitAloneFlag sitAlone = (SitAloneFlag)
-				// studentJsonObject.getOrDefault("sitAlone", false);
-				// SitFirstRowFlag firstRow = (SitFirstRowFlag)
-				// studentJsonObject.getOrDefault("firstRow", false);
-				// StudentName name = (StudentName) studentJsonObject.get("name");
 				String name = (String) studentJsonObject.get("name");
 				boolean sitAlone = (boolean) studentJsonObject.getOrDefault("sitAlone", false);
 				boolean firstRow = (boolean) studentJsonObject.getOrDefault("firstRow", false);
-
 				String fixedChair = (String) studentJsonObject.getOrDefault("fixedChair", "");
 
 				Vector<String> forbiddenPersons = new Vector<String>();
@@ -151,36 +145,9 @@ public class ClassListHandler {
 					while (iterator.hasNext()) {
 						forbiddenPersons.add(iterator.next());
 					}
-					// forbiddenNeighborsMap.put(name, forbiddenPersons);
-				} else {
-					forbiddenPersons.add("");
 				}
-
-				Student tempStudent = new Student(name, sitAlone, firstRow, fixedChair, null);
+				Student tempStudent = new Student(name, sitAlone, firstRow, fixedChair, forbiddenPersons);
 				studentArray.add(tempStudent);
-
-				System.out.println(studentJsonObject);
-				// String name = (String) studentJsonObject.get("name");
-				System.out.println(name);
-				// studentList.add(name);
-
-				/*
-				 * String fixedChair = (String) studentJsonObject.get("fixedChair"); if
-				 * (fixedChair != null) { fixedChairMap.put(name, fixedChair); }
-				 * 
-				 * boolean sitAlone = (boolean) studentJsonObject.getOrDefault("sitAlone",
-				 * false); if (sitAlone == true) { sitAloneList.add(name); }
-				 * 
-				 * boolean firstRow = (boolean) studentJsonObject.getOrDefault("firstRow",
-				 * false); if (firstRow == true) { firstRowList.add(name); }
-				 * 
-				 * JSONArray forbiddenNeighbors = (JSONArray)
-				 * studentJsonObject.getOrDefault("forbiddenNeighbors", null); if
-				 * (forbiddenNeighbors != null) { Vector<String> forbiddenPersons = new
-				 * Vector<>(); Iterator<String> iterator = forbiddenNeighbors.iterator(); while
-				 * (iterator.hasNext()) { forbiddenPersons.add(iterator.next()); }
-				 * forbiddenNeighborsMap.put(name, forbiddenPersons); }
-				 */
 				++id;
 				studentJsonObject = (JSONObject) data.get(Integer.toString(id));
 			}

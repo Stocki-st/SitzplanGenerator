@@ -15,9 +15,9 @@
 		<MenuBar VBox.vgrow="NEVER">
 			<Menu mnemonicParsing="false" text="Klassenlisten">
 				<items>
-					<MenuItem mnemonicParsing="false" text="Klassenliste laden" />
-					<MenuItem mnemonicParsing="false" text="Klassenliste erstellen" />
-					<MenuItem mnemonicParsing="false" text="Klassenliste bearbeiten" />
+					<MenuItem fx:id="menu_loadClassList" mnemonicParsing="false" text="Klassenliste laden" onAction="#callback_loadJsonClassList" />
+					<MenuItem fx:id="menu_createNewClassList" mnemonicParsing="false" text="Klassenliste erstellen" onAction="#callback_createNewClassList" />
+					<MenuItem fx:id="menu_editClassList" mnemonicParsing="false" text="Klassenliste bearbeiten"  onAction="#callback_editClassList"/>
 				</items>
 			</Menu>
 			<Menu mnemonicParsing="false" text="About">

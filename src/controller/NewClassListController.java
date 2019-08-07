@@ -154,7 +154,7 @@ public class NewClassListController extends Application {
 		}
 	}
 
-	public static String getClassListFilename() {
+	public String getClassListFilename() {
 		return classListFilename;
 	}
 

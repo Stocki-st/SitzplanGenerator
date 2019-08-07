@@ -6,22 +6,15 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import application.ClassListHandler;
-import application.Main;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
-import javafx.scene.image.Image;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
-import javafx.stage.Stage;
 import javafx.stage.Window;
 
 public class MainWindowController implements Initializable {
@@ -36,6 +29,8 @@ public class MainWindowController implements Initializable {
 
 	@FXML
 	private Spinner<Integer> sel_numOfRows, sel_desksPerRow;
+	@FXML
+	private MenuItem menu_loadClassList, menu_createNewClassList, menu_editClassList;
 
 	final int initialValueRows = 5;
 	final int initialValueTableaPerRow = 3;
@@ -44,19 +39,33 @@ public class MainWindowController implements Initializable {
 	Button[][] btnArray = null;
 
 	ClassRoomGenerator tableGen = null;
+	boolean numOfSeatsChanged = false;
 
 	// Value factory.
-	SpinnerValueFactory<Integer> valueFactory_numOfRows = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 9,
+	SpinnerValueFactory<Integer> valueFactory_numOfRows = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 15,
 			initialValueRows);
-	SpinnerValueFactory<Integer> valueFactory_desksPerRow = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 9,
+	SpinnerValueFactory<Integer> valueFactory_desksPerRow = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 15,
 			initialValueTableaPerRow);
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		sel_numOfRows.setValueFactory(valueFactory_numOfRows);
 		sel_desksPerRow.setValueFactory(valueFactory_desksPerRow);
+
+		sel_desksPerRow.getEditor().setOnMouseClicked(event -> {
+			numOfSeatsChanged = true;
+			System.out.println("Button pressed: callback_loadJsonClassList");
+
+		});
+		sel_numOfRows.getEditor().setOnMouseClicked(event -> {
+			numOfSeatsChanged = true;
+			System.out.println("Button pressed: callback_loadJsonClassList");
+
+		});
+
 		fileChooser.getExtensionFilters().addAll(new ExtensionFilter("JSON files", "*.json"),
 				new ExtensionFilter("Excel files", "*.xls"));
+
 	}
 
 	public void callback_loadJsonClassList() throws IOException {
@@ -70,7 +79,7 @@ public class MainWindowController implements Initializable {
 			File file = fileChooser.showOpenDialog(dummyWindow);
 
 			classListHandler.setClassListFilename(file.getPath());
-			loadClasslistFromJson(classListHandler.getClassListFilename());
+			loadClasslistFromJson(ClassListHandler.getClassListFilename());
 		} catch (Exception e) {
 			btn_generateSeatingChart.setDisable(true);
 
@@ -80,7 +89,7 @@ public class MainWindowController implements Initializable {
 
 	private void loadClasslistFromJson(String file) {
 		setLabel_ClassList(file);
-		int numOfStudents = ClassListHandler.loadClassList(file);
+		int numOfStudents = classListHandler.loadClassList(file);
 		setLabel_numOfPersons(numOfStudents + " Personen geladen");
 		if (numOfStudents > 0) {
 			btn_generateSeatingChart.setDisable(false);
@@ -99,19 +108,16 @@ public class MainWindowController implements Initializable {
 
 	public void callback_createSeatingChart() throws IOException {
 		System.out.println("Button pressed: callback_createSeatingChart");
-		if (tableGen == null) {
+		if (tableGen == null || numOfSeatsChanged) {
 			tableGen = new ClassRoomGenerator(sel_numOfRows.getValue(), (2 * sel_desksPerRow.getValue()), false);
 			System.out.println("get new table gen");
-
+			numOfSeatsChanged = false;
 		}
+
 		tableArray = tableGen.getSeatingTable();
 		btnArray = tableGen.getButtonTable().clone();
-		// SeatingTableGenerator tableGUI = new SeatingTableGenerator(tableArray,
-		// classListHandler.copyClassList(classListHandler));
 		SeatingTableGenerator tableGUI = new SeatingTableGenerator(tableArray, classListHandler.getClassLists());
-
 		tableGUI.CreateSeatTable();
-
 	}
 
 	public void callback_editClassList() throws IOException {

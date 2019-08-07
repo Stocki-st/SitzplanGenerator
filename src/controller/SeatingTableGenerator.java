@@ -160,7 +160,6 @@ public class SeatingTableGenerator extends Application {
 				// SaveSeatingTableToPdf(mainPane);
 				SaveSeatingTableToImage(mainPane);
 			}
-
 		});
 
 		Button btn_ok = new Button("OK");
@@ -209,7 +208,6 @@ public class SeatingTableGenerator extends Application {
 					btn[i][j].setText(" ");
 					btn[i][j].setDisable(true);
 					seatingTable[i][j] = "-";
-
 				}
 			}
 		}
@@ -231,7 +229,7 @@ public class SeatingTableGenerator extends Application {
 			System.out.println("chair: " + chair);
 
 			if (!isNullOrEmpty(seatingTable[chair - 1][row - 1])) {
-				throw new Exception("Du m�chtest " + name
+				throw new Exception("Du möchtest " + name
 						+ " auf einen bereits vergebenen oder nicht vorhandenen Platz setzen! -> bitte Sitzplatz Konfiguration bearbeiten!");
 			}
 
@@ -269,7 +267,7 @@ public class SeatingTableGenerator extends Application {
 			classList.removeNameFromLists(name);
 		}
 
-		// sit allone
+		// sit alone
 
 		/*
 		 * sit alone feature is part of RC2
@@ -284,25 +282,25 @@ public class SeatingTableGenerator extends Application {
 			for (int j = 0; j < seatingTable.length; j++) {
 				System.out.println("i: " + row_ + " j: " + j);
 
-				if (classList.studentList.isEmpty())
+				if (ClassListHandler.studentList.isEmpty())
 					return;
 				if (isNullOrEmpty(seatingTable[j][row_])) {
-					int studentsLeft = classList.studentList.size();
+					int studentsLeft = ClassListHandler.studentList.size();
 					if (studentsLeft > 0) {
 						studentIterator = rn.nextInt(studentsLeft);
 					} else {
 						studentIterator = 0;
 					}
 
-					if (classList.studentList.isEmpty()) {
+					if (ClassListHandler.studentList.isEmpty()) {
 						return;
 					} else {
-						String name = classList.studentList.get(studentIterator);
+						String name = ClassListHandler.studentList.get(studentIterator);
 
 						btn[j][row_].setText(name);
 						seatingTable[j][row_] = name;
 						checkSitAloneFlag(j, row_, name);
-						classList.studentList.remove(classList.studentList.get(studentIterator));
+						ClassListHandler.studentList.remove(ClassListHandler.studentList.get(studentIterator));
 						if (studentsLeft == 0)
 							return;
 					}
