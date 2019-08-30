@@ -22,7 +22,7 @@
 			</Menu>
 			<Menu mnemonicParsing="false" text="About">
 				<items>
-					<MenuItem mnemonicParsing="false" text="About MyHelloApp" />
+					<MenuItem fx:id="menu_About" mnemonicParsing="false" text="About Sitzplan Generator" onAction="#callback_AboutWindow" />
 				</items>
 			</Menu>
 

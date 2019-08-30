@@ -30,7 +30,7 @@ public class MainWindowController implements Initializable {
 	@FXML
 	private Spinner<Integer> sel_numOfRows, sel_desksPerRow;
 	@FXML
-	private MenuItem menu_loadClassList, menu_createNewClassList, menu_editClassList;
+	private MenuItem menu_loadClassList, menu_createNewClassList, menu_editClassList, menu_About;
 
 	final int initialValueRows = 5;
 	final int initialValueTableaPerRow = 3;
@@ -123,6 +123,12 @@ public class MainWindowController implements Initializable {
 	public void callback_editClassList() throws IOException {
 		System.out.println("Button pressed: callback_editClassList");
 		label_ClassList.setWrapText(true);
+	}
+
+	public void callback_AboutWindow() throws IOException {
+		System.out.println("Button pressed: callback_editClassList");
+		AboutWindow aboutWindow = new AboutWindow();
+		aboutWindow.showWindow();
 	}
 
 	public void callback_createNewClassList() throws IOException {

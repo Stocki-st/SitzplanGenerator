@@ -19,7 +19,7 @@ import org.json.simple.parser.ParseException;
 public class ClassListHandler {
 
 	private Vector<Student> studentArray = new Vector<>();
-	public static Vector<String> studentList = new Vector<>();
+	public Vector<String> studentList = new Vector<>();
 	public Vector<String> firstRowList = new Vector<>();
 	public Vector<String> sitAloneList = new Vector<>();
 	public Map<String, String> fixedChairMap = new HashMap<String, String>();
@@ -68,13 +68,7 @@ public class ClassListHandler {
 
 	}
 
-	public static Vector<String> getStudentList() {
-		Vector<String> tmp = new Vector<>();
-		for (String student : studentList) {
-			tmp.add(student);
-		}
-		return tmp;
-	}
+
 
 	public int getNumOfStudents() {
 		return numOfStudents;
