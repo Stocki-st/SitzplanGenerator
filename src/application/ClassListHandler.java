@@ -108,7 +108,7 @@ public class ClassListHandler {
 
 		index = sitAloneList.indexOf(name);
 		if (index > 0) {
-			sitAloneList.remove(index);
+			sitAloneList.set(index, "");
 		}
 
 		// fixedChairMap.remove(name);

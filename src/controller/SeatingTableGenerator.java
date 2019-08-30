@@ -247,7 +247,7 @@ public class SeatingTableGenerator extends Application {
 			int desiredChair = 0;
 			if (--emptyChairs <= 0)
 				throw new Exception(
-						"Du möchtest mehr Personen in die erste Reihe setzen, als es Pl�tze gibt! -> bitte Sitzplatz Konfiguration bearbeiten!");
+						"Du möchtest mehr Personen in die erste Reihe setzen, als es Plätze gibt! -> bitte Sitzplatz Konfiguration bearbeiten!");
 			do {
 				desiredChair = rn.nextInt(seatingTable.length);
 
@@ -266,6 +266,43 @@ public class SeatingTableGenerator extends Application {
 		/*
 		 * sit alone feature is part of RC2
 		 */
+
+		for (String name : classList.sitAloneList) {
+			System.out.println("sit alone: " + name);
+
+			boolean foundChair = false;
+
+			Random rn = new Random();
+			int desiredChair = 0;
+			int desiredRow = 0;
+			int unusedChair = 0;
+
+			do {
+				foundChair = false;
+				desiredChair = rn.nextInt(seatingTable.length);
+				desiredRow = rn.nextInt(seatingTable[0].length);
+
+				if (isNullOrEmpty(seatingTable[desiredChair][desiredRow])) {
+					if ((desiredChair & 1) == 0) {
+						if (isNullOrEmpty(seatingTable[desiredChair + 1][desiredRow])) {
+							foundChair = true;
+							unusedChair = desiredChair + 1;
+						}
+
+					} else if (isNullOrEmpty(seatingTable[desiredChair - 1][desiredRow])) {
+						foundChair = true;
+						unusedChair = desiredChair - 1;
+					}
+				}
+			} while (!foundChair);
+
+			btn[desiredChair][desiredRow].setText(name);
+			seatingTable[desiredChair][desiredRow] = name;
+			btn[unusedChair][desiredRow].setText("-");
+			seatingTable[unusedChair][desiredRow] = "-";
+			classList.removeNameFromLists(name);
+		}
+		classList.sitAloneList.removeAllElements();
 
 		// sit all
 		int studentIterator = 0;
@@ -292,7 +329,6 @@ public class SeatingTableGenerator extends Application {
 
 						btn[j][row_].setText(name);
 						seatingTable[j][row_] = name;
-						checkSitAloneFlag(j, row_, name);
 						ClassListHandler.studentList.remove(ClassListHandler.studentList.get(studentIterator));
 						if (studentsLeft == 0)
 							return;
