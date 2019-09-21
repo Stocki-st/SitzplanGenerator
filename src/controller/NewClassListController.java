@@ -129,12 +129,14 @@ public class NewClassListController extends Application {
 			// throw empty lines
 			
 			int id = 0;
+			String remove =  "\t";
 			for (String line : text_newClassList.getText().split("\\n")) {
 				if (line.length() > 3) {
+                    String nameWithoutTab = line.replaceAll(remove, " ");
 
 					JSONObject name = new JSONObject();
 					System.out.println("name: " + line + "id: " + id);
-					name.put("name", line);
+					name.put("name", nameWithoutTab);
 					entry.put(String.valueOf(id), name);
 					id++;
 				}

@@ -43,25 +43,46 @@ public class MainWindowController implements Initializable {
 
 	// Value factory.
 	SpinnerValueFactory<Integer> valueFactory_numOfRows = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 15,
-			initialValueRows);
+			initialValueRows) {
+
+		@Override
+		public void decrement(int steps) {
+			numOfSeatsChanged = true;
+			System.out.println("Button pressed: numOfSeatsChanged");
+			this.setValue(this.getValue() - 1);
+		}
+
+		@Override
+		public void increment(int steps) {
+			numOfSeatsChanged = true;
+			this.setValue(this.getValue() + 1);
+			System.out.println("Button pressed: numOfSeatsChanged");
+		}
+	};
+
 	SpinnerValueFactory<Integer> valueFactory_desksPerRow = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 15,
-			initialValueTableaPerRow);
+			initialValueTableaPerRow) {
+
+		@Override
+		public void decrement(int steps) {
+			numOfSeatsChanged = true;
+			this.setValue(this.getValue() - 1);
+			System.out.println("Button pressed: numOfSeatsChanged");
+
+		}
+
+		@Override
+		public void increment(int steps) {
+			numOfSeatsChanged = true;
+			this.setValue(this.getValue() + 1);
+			System.out.println("Button pressed: numOfSeatsChanged");
+		}
+	};
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		sel_numOfRows.setValueFactory(valueFactory_numOfRows);
 		sel_desksPerRow.setValueFactory(valueFactory_desksPerRow);
-
-		sel_desksPerRow.getEditor().setOnMouseClicked(event -> {
-			numOfSeatsChanged = true;
-			System.out.println("Button pressed: callback_loadJsonClassList");
-
-		});
-		sel_numOfRows.getEditor().setOnMouseClicked(event -> {
-			numOfSeatsChanged = true;
-			System.out.println("Button pressed: callback_loadJsonClassList");
-
-		});
 
 		fileChooser.getExtensionFilters().addAll(new ExtensionFilter("JSON files", "*.json"),
 				new ExtensionFilter("Excel files", "*.xls"));

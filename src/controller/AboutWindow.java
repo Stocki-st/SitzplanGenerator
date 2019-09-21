@@ -23,7 +23,7 @@ public class AboutWindow {
 		String s = "Dokumentation gibt es hier: ";
 		Hyperlink link = new Hyperlink("https://stockinger.bitbucket.io");
 
-		String contact = "Bei Fragen, wünschen und Beschwerden: ";
+		String contact = "\nBei Fragen, Anregungen, Wünschen und Beschwerden: ";
 		Hyperlink mail = new Hyperlink("sitzplan.gen@gmail.com");
 		Label contactLabel = new Label(contact);
 		Label docuLabel = new Label(s);

@@ -158,16 +158,39 @@ public class SeatingTableGenerator extends Application {
 
 			@Override
 			public void handle(ActionEvent event) {
-				// TODO Auto-generated method stub
 				stage.close();
-
 			}
 
+		});
+
+		Button btn_turn = new Button("drehen");
+		btn_turn.setPrefSize(90, 40);
+		btn_turn.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				double rotation = tafel.getRotate();
+				
+				if(rotation > 0) {
+					rotation = 0;
+				}else {
+					rotation = 180;
+				}
+				
+				tafel.setRotate(rotation);
+				for (int seat = 0; seat < seatsPerRow; seat++) {
+					for (int row = 0; row < rows; row++) {
+						btn[seat][row].setRotate(rotation);
+					}
+				}
+			}
 		});
 
 		hbox.getChildren().add(btn_ok);
 		hbox.getChildren().add(btn_print);
 		hbox.getChildren().add(btn_swap);
+		hbox.getChildren().add(btn_turn);
+
 		hbox.setAlignment(Pos.CENTER);
 		vbox.getChildren().add(new Label(" "));
 		vbox.getChildren().add(hbox);
