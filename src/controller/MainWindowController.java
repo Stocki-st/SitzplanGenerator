@@ -114,8 +114,10 @@ public class MainWindowController implements Initializable {
 		setLabel_numOfPersons(numOfStudents + " Personen geladen");
 		if (numOfStudents > 0) {
 			btn_generateSeatingChart.setDisable(false);
+			btn_editClassList.setDisable(false);
 		} else {
 			btn_generateSeatingChart.setDisable(true);
+			btn_editClassList.setDisable(true);
 
 		}
 	}
@@ -144,6 +146,7 @@ public class MainWindowController implements Initializable {
 	public void callback_editClassList() throws IOException {
 		System.out.println("Button pressed: callback_editClassList");
 		label_ClassList.setWrapText(true);
+		EditClassListController ctrl = new EditClassListController();
 	}
 
 	public void callback_AboutWindow() throws IOException {

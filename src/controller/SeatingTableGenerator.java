@@ -33,6 +33,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -46,9 +47,7 @@ public class SeatingTableGenerator extends Application {
 		this.seatsPerRow = seatingTable.length;
 		this.rows = seatingTable[0].length;
 		this.seatingTable = seatingTable.clone();
-
 		this.btn = new ToggleButton[seatsPerRow][rows];
-
 		this.classList = classList;
 
 		System.out.println("in ctor");
@@ -492,8 +491,10 @@ public class SeatingTableGenerator extends Application {
 			for (row = 0; row < rows; row++) {
 				btn[chair][row] = new ToggleButton(""); // String.valueOf(i + 1) + "." + String.valueOf(j + 1));
 				btn[chair][row].setPrefSize(150, 50);
+				btn[chair][row].setStyle("-fx-font-weight: bold");
+				
 				btn[chair][row].setOnAction(new EventHandler<ActionEvent>() {
-
+			
 					@Override
 					public void handle(ActionEvent event) {
 						try {
