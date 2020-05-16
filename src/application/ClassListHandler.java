@@ -18,7 +18,11 @@ import org.json.simple.parser.ParseException;
 
 public class ClassListHandler {
 
-	private Vector<Student> studentArray = new Vector<>();
+	private static Vector<Student> studentArray = new Vector<>();
+	public static Vector<Student> getStudentArray() {
+		return studentArray;
+	}
+
 	public Vector<String> studentList = new Vector<>();
 	public Vector<String> firstRowList = new Vector<>();
 	public Vector<String> sitAloneList = new Vector<>();

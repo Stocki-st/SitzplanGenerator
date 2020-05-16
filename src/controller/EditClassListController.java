@@ -68,7 +68,7 @@ public class EditClassListController {
 		GridPane newDataPane = this.getNewPersonDataPane();
 
 		// Create the Delete Button and add Event-Handler
-		Button deleteButton = new Button("Delete Selected Rows");
+		Button deleteButton = new Button("Ausgewählte Einträge löschen");
 		deleteButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
@@ -92,7 +92,7 @@ public class EditClassListController {
 		// Add the Scene to the Stage
 		stage.setScene(scene);
 		// Set the Title of the Stage
-		stage.setTitle("Adding/Deleting Rows in a TableViews");
+		stage.setTitle("Klassenliste bearbeiten");
 		// Display the Stage
 		stage.show();
 	}
@@ -113,7 +113,7 @@ public class EditClassListController {
 		pane.addRow(4, new Label("darf nicht neben ... sitzen:"), forbiddenNeighb);
 
 		// Create the Add Button and add Event-Handler
-		Button addButton = new Button("Add");
+		Button addButton = new Button("Person hinzufügen");
 		addButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
@@ -154,7 +154,7 @@ public class EditClassListController {
 
 		// Check, if any rows are selected
 		if (tsm.isEmpty()) {
-			System.out.println("Please select a row to delete.");
+			System.out.println("Zeile zum löschen auswählen...");
 			return;
 		}
 

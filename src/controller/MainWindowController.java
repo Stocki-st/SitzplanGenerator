@@ -161,7 +161,9 @@ public class MainWindowController implements Initializable {
 		try {
 
 			NewClassListController ctrl = new NewClassListController();
-			loadClasslistFromJson(ctrl.getClassListFilename());
+			if (ctrl.getClassListFilename() != null) {
+				loadClasslistFromJson(ctrl.getClassListFilename());
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
